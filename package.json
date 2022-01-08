@@ -1,0 +1,45 @@
+{
+  "name": "refactor-fe",
+  "version": "1.0.0",
+  "author": "oscario2",
+  "description": "utility to verify styled components",
+  "license": "MIT",
+  "homepage": "https://github.com/oscario2/styled-test",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/oscario2/styled-test.git"
+  },
+  "keywords": [
+    "react",
+    "typescript",
+    "bundle",
+    "rollup"
+  ],
+  "bugs": {
+    "url": "https://github.com/oscario2/refactor-fe/issues"
+  },
+  "main": "lib/cjs/index.js",
+  "module": "lib/esm/index.js",
+  "type": "commonjs",
+  "exports": {
+    "import": "./lib/esm/index.js",
+    "require": "./lib/cjs/index.js"
+  },
+  "scripts": {
+    "build": "rollup -c",
+    "build:watch": "rollup -cw",
+    "test": "jest --config jest.config.js --verbose --testPathPattern=src/components",
+    "prettier": "prettier --config .prettierrc --write \"**/*.{ts,tsx}\"",
+    "prettier:list-different": "prettier --config .prettierrc --list-different \"**/*.{ts,tsx}\"",
+    "prepare": "husky install"
+  },
+  "peerDependencies": {
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
+  },
+  "devDependencies": {
+    "@types/styled-components": "^5.1.19",
+    "husky": "^7.0.4",
+    "styled-components": "^5.3.3"
+  }
+}

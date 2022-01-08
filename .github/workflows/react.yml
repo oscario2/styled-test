@@ -1,0 +1,39 @@
+name: main
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  push:
+    branches: [main]
+
+jobs:
+  test:
+    name: test on Node ${{ matrix.node }} and ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        node: ['16.x']
+        os: [ubuntu-latest, windows-latest, macOS-latest]
+        include:
+          - os: ubuntu-latest
+            node: '14.x'
+          - os: ubuntu-latest
+            node: '17.x'
+    steps:
+      - name: checkout repo
+        uses: actions/checkout@v2
+
+      - name: use node ${{ matrix.node }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node }}
+
+      - name: install
+        run: yarn install
+
+      - name: test src
+        run: yarn test
+
+      - name: build
+        run: yarn build
