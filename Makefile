@@ -31,19 +31,19 @@ fi
 ${_OPTS} && $(1)
 endef
 
-# test
+# jest test pattern
 define _TEST
 $(call _RUN, yarn jest --config jest.config.js --verbose --testPathPattern=$(1))
 endef
 
-##
+
+# storybook
+storybook:
+	$(call _RUN, node scripts/storybook.script.js)
+
+storybook-clean:
+	$(call _RUN, node -p \"fs.rmdirSync('node_modules/.cache/storybook', { recursive: true });\")
+
 # tests
-##
 test:
 	$(call _TEST,src)
-	
-##
-# hooks
-##
-prepare:
-	$(call _RUN, yarn husky install)

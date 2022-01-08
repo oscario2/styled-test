@@ -1,5 +1,5 @@
 {
-  "name": "refactor-fe",
+  "name": "styled-test",
   "version": "1.0.0",
   "author": "oscario2",
   "description": "utility to verify styled components",
@@ -26,20 +26,48 @@
     "require": "./lib/cjs/index.js"
   },
   "scripts": {
+    "prepare": "husky install",
     "build": "rollup -c",
     "build:watch": "rollup -cw",
     "test": "jest --config jest.config.js --verbose --testPathPattern=src/components",
+    "storybook:script": "node scripts/storybook.script.js",
+    "storybook:clean": "node -p \"fs.rmdirSync('node_modules/.cache/storybook', { recursive: true });\"",
     "prettier": "prettier --config .prettierrc --write \"**/*.{ts,tsx}\"",
-    "prettier:list-different": "prettier --config .prettierrc --list-different \"**/*.{ts,tsx}\"",
-    "prepare": "husky install"
+    "prettier:list-different": "prettier --config .prettierrc --list-different \"**/*.{ts,tsx}\""
   },
   "peerDependencies": {
     "react": "^17.0.2",
     "react-dom": "^17.0.2"
   },
+  "dependencies": {
+    "cssjson": "^2.1.3"
+  },
   "devDependencies": {
+    "@rollup/plugin-commonjs": "^21.0.1",
+    "@rollup/plugin-node-resolve": "^13.1.3",
+    "@rollup/plugin-typescript": "^8.3.0",
+    "@storybook/react": "^6.4.9",
+    "@storybook/testing-react": "^1.2.2",
+    "@testing-library/react": "^12.1.2",
+    "@types/jest": "^27.4.0",
     "@types/styled-components": "^5.1.19",
+    "@typescript-eslint/eslint-plugin": "^5.9.0",
+    "@typescript-eslint/parser": "^5.9.0",
+    "dotenv": "^10.0.0",
+    "eslint": "^8.6.0",
+    "eslint-config-google": "^0.14.0",
     "husky": "^7.0.4",
-    "styled-components": "^5.3.3"
+    "jest": "^27.4.7",
+    "jest-styled-components": "^7.0.8",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "rollup": "^2.63.0",
+    "rollup-plugin-dts": "^4.1.0",
+    "rollup-plugin-peer-deps-external": "^2.2.4",
+    "rollup-plugin-terser": "^7.0.2",
+    "storybook-addon-performance": "^0.16.1",
+    "styled-components": "^5.3.3",
+    "ts-jest": "^27.1.2",
+    "typescript": "^4.5.4"
   }
 }

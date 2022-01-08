@@ -38,7 +38,7 @@ export default [
       peerDepsExternal(),
       resolve(),
       commonjs(),
-      typescript({ tsconfig: './tsconfig.rollup.json' }),
+      typescript({ tsconfig: './tsconfig.json' }),
       terser(),
     ],
   },

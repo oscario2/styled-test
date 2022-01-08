@@ -1,53 +1,52 @@
 {
-    "include": ["src", "tests", "scripts", "rollup.config.js"],
-    "exclude": ["node_modules"],
-    "compilerOptions": {
-      "baseUrl": ".",
-      "target": "ES5",
-      "module": "esnext",
-      "moduleResolution": "node",
-      "resolveJsonModule": true,
-      "lib": ["dom", "esnext"],
-      // outDir for rollup
-      "outDir": "lib",
-      // rollup will save in `outDir/declarationDir`
-      "declarationDir": "types",
-      // compile react without needing to import react
-      "jsx": "react-jsx",
-      // emit compliant iterations for ES3-ES5
-      "downlevelIteration": true,
-      // allow compilation of .js files and for `jest` to work
-      "allowJs": true,
-      "allowSyntheticDefaultImports": true,
-      // check for errors in .js files
-      "checkJs": true,
-      // "importHelpers": true,
-      // output .d.ts declaration files for consumers
-      "declaration": true,
-      "emitDeclarationOnly": true,
-      // skip @internal classes on generating declaration
-      "stripInternal": true,
-      // output .js.map sourcemap files for consumers
-      "sourceMap": true,
-      // stricter type-checking for stronger correctness. Recommended by TS
-      "strict": true,
-      // linter checks for common issues
-      "noImplicitReturns": true,
-      "noFallthroughCasesInSwitch": true,
-      // noUnused* overlap with @typescript-eslint/no-unused-vars, can disable if duplicative
-      "noUnusedLocals": true,
-      "noUnusedParameters": true,
-      // interop between ESM and CJS modules. Recommended by TS
-      "esModuleInterop": true,
-      // allow @decorate for classes, methods or properties
-      "experimentalDecorators": true,
-      // significant perf increase by skipping checking .d.ts files, particularly those in node_modules. Recommended by TS
-      "skipLibCheck": true,
-      // error out if import and file system have a casing mismatch. Recommended by TS
-      "forceConsistentCasingInFileNames": true
-      // preact as react factory
-      // "jsxFactory": "h",
-      // "jsxFragmentFactory": "preact.Fragment"
-    }
+  "include": ["src", "rollup.config.js", "examples"],
+  "exclude": ["node_modules"],
+  "compilerOptions": {
+    "baseUrl": ".",
+    "target": "ES5",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "lib": ["dom", "esnext"],
+    // outDir for rollup
+    "outDir": "lib",
+    // rollup will save in `outDir/declarationDir`
+    "declarationDir": "types",
+    // compile react without needing to import react
+    "jsx": "react-jsx",
+    // emit compliant iterations for ES3-ES5
+    "downlevelIteration": true,
+    // allow compilation of .js files and for `jest` to work
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
+    // check for errors in .js files
+    "checkJs": true,
+    // "importHelpers": true,
+    // output .d.ts declaration files for consumers
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    // skip @internal classes on generating declaration
+    "stripInternal": true,
+    // output .js.map sourcemap files for consumers
+    "sourceMap": true,
+    // stricter type-checking for stronger correctness. Recommended by TS
+    "strict": true,
+    // linter checks for common issues
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    // noUnused* overlap with @typescript-eslint/no-unused-vars, can disable if duplicative
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    // interop between ESM and CJS modules. Recommended by TS
+    "esModuleInterop": true,
+    // allow @decorate for classes, methods or properties
+    "experimentalDecorators": true,
+    // significant perf increase by skipping checking .d.ts files, particularly those in node_modules. Recommended by TS
+    "skipLibCheck": true,
+    // error out if import and file system have a casing mismatch. Recommended by TS
+    "forceConsistentCasingInFileNames": true
+    // preact as react factory
+    // "jsxFactory": "h",
+    // "jsxFragmentFactory": "preact.Fragment"
   }
-  
+}

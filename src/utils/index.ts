@@ -4,7 +4,7 @@ import { FlattenSimpleInterpolation } from 'styled-components';
 import { toJSON } from 'cssjson';
 
 // types
-import type { TCssProperty, TPseudoProperty } from 'src/types/test.types';
+import type { TCssProperty, TPseudoProperty } from 'src/types/index';
 
 interface ICssJson {
   /** properties */
@@ -14,7 +14,7 @@ interface ICssJson {
 }
 
 /**
- * traverse recursively through the CSS tree and build each `selector`
+ * recursively traverse through the CSS tree and build each `selector`
  * @param children
  * @param selector [0] = className
  * @param styles
