@@ -39,9 +39,11 @@ const suite: ITestStyleSuite[] = [
   },
 ];
 
-suite.forEach((suite) => {
-  const { story } = suite;
-  describe(`<${story.type.storyName} />`, () => {
-    runStylesTests(suite);
+describe('suite', () => {
+  suite.forEach((suite) => {
+    const { story } = suite;
+    test(`<${story.type.storyName} />`, () => {
+      runStylesTests(suite);
+    });
   });
 });

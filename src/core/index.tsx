@@ -1,26 +1,22 @@
 import { FlattenSimpleInterpolation } from 'styled-components';
-import { render } from '@testing-library/react';
+import { render, cleanup } from '@testing-library/react';
 
 // types
 import type { ITestStyleSuite, TCssProperty } from 'src/types';
 
 // utils
 import { getCSSProperties } from 'src/utils';
+import { StyleError, TFailReason, EFailReason } from 'src/error';
 
-/*
-const colors = {
-  reset: '\033[0m',
-  red: '\033[31m',
-};
-*/
-
-const error = (message: string) => {
-  throw new Error(message);
+const error = (reason: TFailReason, message?: string) => {
+  throw new StyleError(reason, message);
 };
 
 /**
- * ensure all `theme` properties exist on rendered component
+ * ```.
+ * ensure all `theme` properties exist on a rendered component
  * allows for decoupled testing of different `styles`
+ * ```
  * - handles pseudo selectors
  * - catches duplicates rules
  * @param suite
@@ -31,8 +27,11 @@ export const runStylesTests = (suite: ITestStyleSuite) => {
   // arrange
   const { container, debug } = render(story);
   const jsx = container.querySelector(styled.toString()) as HTMLElement;
-  if (jsx === undefined) {
-    error(`could not find ${styled.toString()}`);
+  if (!jsx) {
+    error(
+      EFailReason.ElementNotFoundInDOM,
+      `could not find ${styled.toString()} in DOM`,
+    );
   }
 
   // concat themes
@@ -48,118 +47,105 @@ export const runStylesTests = (suite: ITestStyleSuite) => {
 
   const classList = Array.from(jsx.classList);
   if (classList.length !== 2) {
-    error(`found ${classList.length} classes, expected 2`);
+    error(
+      EFailReason.TooManyClasses,
+      `found ${classList.length} classes, expected 2`,
+    );
   }
 
   // consts
   const className = '.' + classList[1].replace('.', '');
-  const { _values: computedStyles } = getComputedStyle(
-    jsx,
-  ) as CSSStyleDeclaration & {
-    _values: Record<string, string>;
-  };
+  const matchedRules = [] as string[];
 
   // get all rules from our selected css``[] themes
   const themeStyles = getCSSProperties(className, theme);
   if (themeStyles[className] === undefined) throw new Error();
 
-  /**
-   * assert `base`rules
-   **/
-  const assertBaseRules = () => {
-    const baseRules = themeStyles[className];
-    const baseRulesKeys = Object.keys(baseRules);
+  // get stylesheet from `document`
+  const { styleSheets } = document;
+  if (!styleSheets) {
+    error(
+      EFailReason.DocumentStyleSheetUndefined,
+      'document.styleSheets = ' + styleSheets,
+    );
+  }
 
-    baseRulesKeys.forEach((cssRule) => {
-      const cssValue = baseRules[cssRule as TCssProperty];
-      const computedValue = computedStyles[cssRule];
+  // ensure stylesheet exits
+  const sheet = styleSheets.item(0);
+  if (!sheet) {
+    error(
+      EFailReason.DocumentCssRulesUndefied,
+      'styleSheets.item(0) = ' + sheet,
+    );
+  }
 
-      if (Array.isArray(cssValue)) {
-        error(`duplicate CSS rules for '${cssRule}' found`);
-      }
+  if (!sheet?.cssRules) {
+    error(
+      EFailReason.DocumentCssRulesEmpty,
+      'sheet.cssRules = ' + sheet?.cssRules,
+    );
+  }
 
-      if (!computedValue) {
-        error(`CSS rule '${cssRule}' not found`);
-      }
+  // get all style rules for `document`
+  const cssRules = Array.from(sheet!.cssRules) as CSSStyleRule[];
+  if (cssRules.length === 0) {
+    error(EFailReason.DocumentCssRulesEmpty, 'sheet.cssRules.length = 0');
+  }
 
-      if (computedValue !== cssValue) {
+  // map css rules from rendered `document`
+  type TCssPair = Record<TCssProperty, string>;
+  const docStyles = {} as Record<string, TCssPair>;
+  cssRules.forEach(({ selectorText, style }) => {
+    docStyles[selectorText] = style as unknown as TCssPair;
+  });
+
+  // ensure `theme` styles exists in `document` styles
+  Object.keys(themeStyles).forEach((selector) => {
+    // ignore empty `theme` rules
+    const themeRules = Object.keys(themeStyles[selector]);
+    if (themeRules.length === 0) return;
+
+    // ensure `theme` key exists in rendered `document`
+    if (!docStyles[selector]) {
+      error(
+        EFailReason.SelectorNotFoundinDOM,
+        `${selector} not found in 'document'`,
+      );
+    }
+
+    // ensure every rule in our `theme` matches `document`
+    Object.keys(themeStyles[selector]).forEach((cssKey) => {
+      const _cssKey = cssKey as TCssProperty;
+
+      const want = themeStyles[selector][_cssKey];
+      const got = docStyles[selector][_cssKey];
+
+      if (Array.isArray(want)) {
         error(
-          `expected '${cssRule}:${cssValue}' got ${cssRule}:${computedValue}`,
+          EFailReason.DuplicateStyleRule,
+          `found ${want.length} rules for ${cssKey}`,
         );
       }
 
-      // duplicate rules are parsed as an array
-      // expect(jsx).toHaveStyleRule(cssRule, cssValue);
+      if (want !== got) {
+        error(
+          EFailReason.InvalidStyleRule,
+          `expected ${cssKey}:${want}, got ${cssKey}:${got}`,
+        );
+      }
+      matchedRules.push(`${selector} > ${cssKey}: ${got}`);
     });
-  };
-
-  //
-  assertBaseRules();
-
-  // return early if we have no pseudo rules
-  if (Object.keys(themeStyles).length <= 1) {
-    // debug
-    if (verbose) {
-      console.log(JSON.stringify(themeStyles, null, 3));
-    }
-    return;
-  }
-
-  /**
-   * assert `pseudo`rules
-   **/
-  const assertPseudoRules = () => {
-    // get stylesheet from `document`
-    const { styleSheets } = document;
-    expect(styleSheets).not.toBeUndefined();
-
-    // ensure stylesheet exits
-    const sheet = styleSheets.item(0);
-    expect(sheet).not.toBeUndefined();
-    expect(sheet?.cssRules).not.toBeUndefined();
-
-    // get all style rules for `document`
-    const cssRules = Array.from(sheet!.cssRules) as CSSStyleRule[];
-    expect(cssRules).not.toBeUndefined();
-    expect(cssRules.length > 0).toBeTruthy();
-
-    // map css rules from rendered `document`
-    type TCssPair = Record<TCssProperty, string>;
-    const docStyles = {} as Record<string, TCssPair>;
-    cssRules.forEach(({ selectorText, style }) => {
-      docStyles[selectorText] = style as unknown as TCssPair;
-    });
-
-    // ensure `theme` `psuedo` styles exists in `document` styles
-    Object.keys(themeStyles).forEach((selector) => {
-      // is pseudo selector
-      if (selector.indexOf(':') === -1) return;
-
-      // ignore empty `theme` rules
-      const themeRules = Object.keys(themeStyles[selector]);
-      if (themeRules.length === 0) return;
-
-      // ensure `theme` key exists in rendered `document`
-      expect(docStyles[selector]).toBeTruthy();
-
-      // ensure every rule in our `theme` matches `document`
-      Object.keys(themeStyles[selector]).forEach((cssKey) => {
-        const _cssKey = cssKey as TCssProperty;
-
-        const got = docStyles[selector][_cssKey];
-        const want = themeStyles[selector][_cssKey];
-
-        expect(got).toStrictEqual(want);
-      });
-    });
-  };
-
-  //
-  assertPseudoRules();
+  });
 
   // debug
-  if (verbose) console.log(JSON.stringify(themeStyles, null, 3));
+  if (verbose) {
+    console.log('[theme]:\n' + JSON.stringify(themeStyles, null, 3));
+  }
+
+  if (verbose) {
+    console.log('[matched]:\n' + matchedRules.join('\n'));
+  }
 
   // clean-up DOM
-  document.body.innerHTML = '';
+  cleanup();
 };

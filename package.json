@@ -29,7 +29,7 @@
     "prepare": "husky install",
     "build": "rollup -c",
     "build:watch": "rollup -cw",
-    "test": "jest --config jest.config.js --verbose --testPathPattern=src/components",
+    "test": "jest --config jest.config.js --verbose --testPathPattern=examples",
     "storybook:script": "node scripts/storybook.script.js",
     "storybook:clean": "node -p \"fs.rmdirSync('node_modules/.cache/storybook', { recursive: true });\"",
     "prettier": "prettier --config .prettierrc --write \"**/*.{ts,tsx}\"",

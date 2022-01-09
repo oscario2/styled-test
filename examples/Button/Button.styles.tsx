@@ -13,6 +13,7 @@ import type { IButtonProps } from './Button.types';
 
 /** dynamic */
 const Button = styled.button<IButtonProps>`
+  display: flex;
   ${({ fontSize }) => fontSizeStyles[fontSize]};
   ${({ fontWeight }) => fontWeightStyles[fontWeight]};
   ${({ color }) => colorStyles[color]};

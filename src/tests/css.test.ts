@@ -64,5 +64,4 @@ describe('`styled` to `css`', () => {
     expect(props[selector.join('')]).not.toBeUndefined();
     expect(props[selector.join('')].display).not.toBeUndefined();
   });
-  test('fail on duplicate rules', () => {});
 });
