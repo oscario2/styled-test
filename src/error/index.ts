@@ -2,13 +2,12 @@
 export const EFailReason = {
   DocumentStyleSheetUndefined: 'DocumentStyleSheetUndefined',
   DocumentStyleSheetEmpty: 'DocumentStyleSheetEmpty',
-
   DocumentCssRulesUndefied: 'DocumentCssRulesUndefied',
   DocumentCssRulesEmpty: 'DocumentCssRulesEmpty',
-
   DuplicateStyleRule: 'DuplicateStyleRule',
   ElementNotFoundInDOM: 'ElementNotFoundInDOM',
   InvalidStyleRule: 'InvalidStyleRule',
+  NotInDOM: 'NotInDOM',
   SelectorNotFoundinDOM: 'SelectorNotFoundinDOM',
   TooManyClasses: 'TooManyClasses',
 } as const;

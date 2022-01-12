@@ -60,6 +60,15 @@ describe('style tests', () => {
     runStylesTests(suite);
   });
 
+  test('media queries', () => {
+    suite.themes.push(css`
+      @media (min-width: 200px) {
+        color: #fff;
+      }
+    `);
+    // TODO: support parsing @media queries @oscario2
+  });
+
   test('`styled` too many classes', () => {
     // arrange
     suite.story = (

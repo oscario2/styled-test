@@ -25,6 +25,21 @@ describe('`styled` to `css`', () => {
     expect(props[className].display).not.toBeUndefined();
   });
 
+  test('parse `variables` and `calc`', () => {
+    const style = css`
+      --width: 450px;
+      width: calc(var(--width) - 20px);
+    `;
+
+    // act
+    const props = getCSSProperties(className, style);
+
+    // assert
+    expect(Object.keys(props).length).toEqual(1);
+    expect(props[className]).not.toBeUndefined();
+    expect(props[className].width).not.toBeUndefined();
+  });
+
   test('parse empty `base` and `pseudo` styles', () => {
     // arrange
     const selector: TSelector = [className, ':after'];

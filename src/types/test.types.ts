@@ -26,6 +26,10 @@ export interface ITestStyleSuite {
    */
   themes: FlattenSimpleInterpolation[];
   /**
+   * define viewport to resolve @media queries
+   */
+  viewport?: { height: number; width: number };
+  /**
    * prints
    * - the rendered component `html`
    * - all checked `css` rules

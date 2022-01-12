@@ -22,7 +22,11 @@ const error = (reason: TFailReason, message?: string) => {
  * @param suite
  */
 export const runStylesTests = (suite: ITestStyleSuite) => {
-  const { story, styled, verbose } = suite;
+  const { story, styled, verbose, viewport } = suite;
+
+  if (!document || !window) {
+    error(EFailReason.NotInDOM, '`document` nor `window` exists');
+  }
 
   // arrange
   const { container, debug } = render(story);
@@ -33,6 +37,10 @@ export const runStylesTests = (suite: ITestStyleSuite) => {
       `could not find ${styled.toString()} in DOM`,
     );
   }
+
+  // set viewport to resolve @media queries
+  window.innerWidth = viewport?.width || window.innerWidth;
+  window.innerHeight = viewport?.height || window.innerHeight;
 
   // concat themes
   const theme = [
