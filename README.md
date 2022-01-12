@@ -1,4 +1,6 @@
-## Intro
+# Styled Test
+
+[![main](https://github.com/oscario2/styled-test/actions/workflows/react.yml/badge.svg)](https://github.com/oscario2/styled-test/actions/workflows/react.yml)
 
 A test runner for `storybook` and `styled-components` which allows for decoupled testing to ensure an interpolated style exists on the rendered component. This runner opinionates on an architecture which keeps declaration and implementation of styles seperate.
 
